@@ -22,12 +22,17 @@ class Queue<T> {
   length(): number {
     return this.queue.length;
   }
+
+  isEmpty(): boolean {
+    return this.length() === 0;
+  }
 }
 
 const myQueue = new Queue<string>();
 console.log("enqueue:", myQueue.enqueue("a"));
 console.log("peek:", myQueue.peek());
 console.log("length: ", myQueue.length());
+console.log("isEmpty: ", myQueue.isEmpty());
 console.log("enqueue:", myQueue.enqueue("b"));
 console.log("length: ", myQueue.length());
 console.log("dequeue: ", myQueue.dequeue());
@@ -36,3 +41,4 @@ console.log("length: ", myQueue.length());
 console.log("dequeue: ", myQueue.dequeue());
 console.log("peek: ", myQueue.peek());
 console.log("length: ", myQueue.length());
+console.log("isEmpty: ", myQueue.isEmpty());
