@@ -31,6 +31,46 @@ export class LinkedList<T> {
     this.headNode = newHead;
   }
 
+  get(index: number) {
+    if (this.headNode === null || index < 0 || index > this.length() - 1) {
+      return;
+    }
+
+    if (index === 0) {
+      return this.headNode.data;
+    }
+
+    let i = 1;
+    let current = this.headNode.next;
+    while (i < index) {
+      current = current.next;
+      i++;
+    }
+
+    return current.data;
+  }
+
+  delete(index: number) {
+    if (this.headNode === null || index < 0 || index > this.length() - 1) {
+      return;
+    }
+
+    if (index === 0) {
+      this.headNode = this.headNode.next;
+    }
+
+    let i = 1;
+    let previous = this.headNode;
+    let current = this.headNode.next;
+    while (i < index) {
+      i++;
+      previous = current;
+      current = current.next;
+    }
+
+    previous.next = current.next;
+  }
+
   deleteWithValue(data: T) {
     if (this.headNode === null) {
       return;
@@ -48,31 +88,6 @@ export class LinkedList<T> {
       }
       current = current.next;
     }
-  }
-
-  get(index: number) {
-    if (this.headNode === null) {
-      return;
-    }
-
-    if (index === 0) {
-      return this.headNode.data;
-    }
-
-    let i = 1;
-    let current = this.headNode.next;
-    while (i < index) {
-      if (current === null) {
-        return;
-      }
-      current = current.next;
-      i++;
-    }
-
-    if (current === null) {
-      return;
-    }
-    return current.data;
   }
 
   head() {
@@ -114,10 +129,20 @@ export class LinkedList<T> {
   isEmpty() {
     return this.headNode === null;
   }
+
+  print() {
+    const values: T[] = [];
+    let current = this.headNode;
+    while (current) {
+      values.push(current.data);
+      current = current.next;
+    }
+
+    return values.join(" → ");
+  }
 }
 
 const LL = new LinkedList<string>();
-
 console.log(LL.head());
 LL.append("a");
 console.log(LL.head());
@@ -141,3 +166,9 @@ LL3.append("a");
 console.log(LL3.length());
 LL3.append("a");
 console.log(LL3.length());
+
+const LL4 = new LinkedList<string>();
+["a", "b", "c", "d", "e"].map((v) => LL4.append(v));
+console.log(LL4.delete(2));
+console.log(LL4.delete(1));
+console.log(LL4.print());
