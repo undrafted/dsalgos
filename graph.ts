@@ -1,20 +1,23 @@
 import { Queue } from "./queue";
 
-class Node<T> {
-  neigbors: Node<T>[] = [];
-  key: T;
+type NodeKey = string | number;
+type VisitedObj = { [key in NodeKey]: any };
 
-  constructor(key: T) {
+class Node {
+  neigbors: Node[] = [];
+  key: NodeKey;
+
+  constructor(key: NodeKey) {
     this.key = key;
   }
 
-  addNeighbor(node: Node<T>) {
+  addNeighbor(node: Node) {
     this.neigbors.push(node);
   }
 }
 
-export class Graph<T> {
-  nodes: Node<T>[] = [];
+export class Graph {
+  nodes: Node[] = [];
   edges: string[] = [];
   directed: boolean = false;
 
@@ -22,11 +25,11 @@ export class Graph<T> {
     this.directed = directed;
   }
 
-  addNode(key: T): void {
+  addNode(key: NodeKey): void {
     this.nodes.push(new Node(key));
   }
 
-  getNode(key: T): Node<T> {
+  getNode(key: NodeKey): Node {
     const node = this.nodes.find((n) => n.key === key);
 
     if (typeof node === "undefined") {
@@ -36,7 +39,7 @@ export class Graph<T> {
     return node;
   }
 
-  addEdge(nodeKey1: T, nodeKey2: T): void {
+  addEdge(nodeKey1: NodeKey, nodeKey2: NodeKey): void {
     const node1 = this.getNode(nodeKey1);
     const node2 = this.getNode(nodeKey2);
 
@@ -65,26 +68,23 @@ export class Graph<T> {
 
   breadthFirstSearch(startingNodeKey, visitCb) {
     const startingNode = this.getNode(startingNodeKey);
-    const visited = this.nodes.reduce((acc, node) => {
-      // @ts-ignore
+
+    const visited: VisitedObj = this.nodes.reduce((acc, node) => {
       acc[node.key] = false;
       return acc;
     }, {});
 
-    const queue = new Queue<Node<T>>();
+    const queue = new Queue<Node>();
     queue.enqueue(startingNode);
 
     while (!queue.isEmpty()) {
       const currentNode = queue.dequeue();
-      // @ts-ignore
       if (!visited[currentNode.key]) {
         visitCb(currentNode);
-        // @ts-ignore
         visited[currentNode.key] = true;
       }
 
       currentNode.neigbors.forEach((node) => {
-        // @ts-ignore
         if (!visited[node.key]) {
           queue.enqueue(node);
         }
@@ -104,7 +104,7 @@ export class Graph<T> {
 // console.log(graph.print());
 // console.log(graph.getEdges());
 
-const graph = new Graph<string>(true);
+const graph = new Graph(true);
 const nodes = ["Berlin", "Frankfurt", "Munich", "Dresden", "Bremen", "Hamburg"];
 const edges = [
   ["Berlin", "Frankfurt"],
