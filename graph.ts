@@ -1,5 +1,5 @@
 import { Queue } from "./queue";
-
+import { Stack } from "./stack";
 type NodeKey = string | number;
 type VisitedObj = { [key in NodeKey]: any };
 
@@ -66,7 +66,7 @@ export class Graph {
     return this.edges.join("\n");
   }
 
-  breadthFirstSearch(startingNodeKey, visitCb) {
+  breadthFirstSearch(startingNodeKey: NodeKey, visitCb: (node: Node) => void) {
     const startingNode = this.getNode(startingNodeKey);
 
     const visited: VisitedObj = this.nodes.reduce((acc, node) => {
@@ -91,6 +91,59 @@ export class Graph {
       });
     }
   }
+
+  depthFirstSearch(startingNodeKey: NodeKey, visitCb: (node: Node) => void) {
+    const startingNode = this.getNode(startingNodeKey);
+
+    const visited: VisitedObj = this.nodes.reduce((acc, node) => {
+      acc[node.key] = false;
+      return acc;
+    }, {});
+
+    const explore = (node: Node) => {
+      if (visited[node.key]) {
+        return;
+      }
+
+      visitCb(node);
+      visited[node.key] = true;
+
+      node.neigbors.forEach((node) => {
+        explore(node);
+      });
+    };
+
+    explore(startingNode);
+  }
+
+  depthFirstSearchUsingStack(
+    startingNodeKey: NodeKey,
+    visitCb: (node: Node) => void
+  ) {
+    const startingNode = this.getNode(startingNodeKey);
+
+    const visited: VisitedObj = this.nodes.reduce((acc, node) => {
+      acc[node.key] = false;
+      return acc;
+    }, {});
+
+    const stack = new Stack<Node>();
+    stack.push(startingNode);
+
+    while (!stack.isEmpty()) {
+      const currentNode = stack.pop();
+      if (!visited[currentNode.key]) {
+        visitCb(currentNode);
+        visited[currentNode.key] = true;
+      }
+
+      currentNode.neigbors.forEach((node) => {
+        if (!visited[node.key]) {
+          stack.push(node);
+        }
+      });
+    }
+  }
 }
 
 // const graph = new Graph();
@@ -105,6 +158,7 @@ export class Graph {
 // console.log(graph.getEdges());
 
 const graph = new Graph(true);
+
 const nodes = ["Berlin", "Frankfurt", "Munich", "Dresden", "Bremen", "Hamburg"];
 const edges = [
   ["Berlin", "Frankfurt"],
@@ -125,6 +179,23 @@ edges.forEach((nodes) => {
   graph.addEdge(nodes[0], nodes[1]);
 });
 
+console.log("==================");
+console.log("BFS");
+console.log("==================");
 graph.breadthFirstSearch("Berlin", (node) => {
+  console.log(node.key);
+});
+
+console.log("==================");
+console.log("DFS");
+console.log("==================");
+graph.depthFirstSearchUsingStack("Berlin", (node) => {
+  console.log(node.key);
+});
+
+console.log("==================");
+console.log("DFS using Stack");
+console.log("==================");
+graph.depthFirstSearchUsingStack("Berlin", (node) => {
   console.log(node.key);
 });
