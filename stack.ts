@@ -1,11 +1,11 @@
-class Stack<T> {
+export class Stack<T> {
   stack: T[] = [];
 
   push(item: T) {
     this.stack.push(item);
   }
   pop() {
-    this.stack.pop();
+    return this.stack.pop();
   }
 
   peek() {
@@ -22,20 +22,20 @@ class Stack<T> {
   }
 }
 
-const myStack = new Stack<string>();
-myStack.push("first");
-console.log("enqueue: first");
-console.log("peek:", myStack.peek());
-console.log("length: ", myStack.length());
-console.log("isEmpty: ", myStack.isEmpty());
-myStack.push("second");
-console.log("enqueue: second");
-console.log("length: ", myStack.length());
-console.log("peek: ", myStack.peek());
-console.log("dequeue: ", myStack.pop());
-console.log("peek: ", myStack.peek());
-console.log("length: ", myStack.length());
-console.log("dequeue: ", myStack.pop());
-console.log("peek: ", myStack.peek());
-console.log("length: ", myStack.length());
-console.log("isEmpty: ", myStack.isEmpty());
+// const myStack = new Stack<string>();
+// myStack.push("first");
+// console.log("enqueue: first");
+// console.log("peek:", myStack.peek());
+// console.log("length: ", myStack.length());
+// console.log("isEmpty: ", myStack.isEmpty());
+// myStack.push("second");
+// console.log("enqueue: second");
+// console.log("length: ", myStack.length());
+// console.log("peek: ", myStack.peek());
+// console.log("dequeue: ", myStack.pop());
+// console.log("peek: ", myStack.peek());
+// console.log("length: ", myStack.length());
+// console.log("dequeue: ", myStack.pop());
+// console.log("peek: ", myStack.peek());
+// console.log("length: ", myStack.length());
+// console.log("isEmpty: ", myStack.isEmpty());
