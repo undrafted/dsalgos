@@ -1,3 +1,5 @@
+import { Queue } from "./queue";
+
 class Node<T> {
   neigbors: Node<T>[] = [];
   key: T;
@@ -60,15 +62,69 @@ export class Graph<T> {
   getEdges(): string {
     return this.edges.join("\n");
   }
+
+  breadthFirstSearch(startingNodeKey, visitCb) {
+    const startingNode = this.getNode(startingNodeKey);
+    const visited = this.nodes.reduce((acc, node) => {
+      // @ts-ignore
+      acc[node.key] = false;
+      return acc;
+    }, {});
+
+    const queue = new Queue<Node<T>>();
+    queue.enqueue(startingNode);
+
+    while (!queue.isEmpty()) {
+      const currentNode = queue.dequeue();
+      // @ts-ignore
+      if (!visited[currentNode.key]) {
+        visitCb(currentNode);
+        // @ts-ignore
+        visited[currentNode.key] = true;
+      }
+
+      currentNode.neigbors.forEach((node) => {
+        // @ts-ignore
+        if (!visited[node.key]) {
+          queue.enqueue(node);
+        }
+      });
+    }
+  }
 }
 
-const graph = new Graph();
-graph.addNode("1");
-graph.addNode("2");
-graph.addNode("3");
-graph.addNode("4");
-graph.addEdge("1", "2");
-graph.addEdge("1", "3");
-graph.addEdge("3", "4");
-console.log(graph.print());
-console.log(graph.getEdges());
+// const graph = new Graph();
+// graph.addNode("1");
+// graph.addNode("2");
+// graph.addNode("3");
+// graph.addNode("4");
+// graph.addEdge("1", "2");
+// graph.addEdge("1", "3");
+// graph.addEdge("3", "4");
+// console.log(graph.print());
+// console.log(graph.getEdges());
+
+const graph = new Graph<string>(true);
+const nodes = ["Berlin", "Frankfurt", "Munich", "Dresden", "Bremen", "Hamburg"];
+const edges = [
+  ["Berlin", "Frankfurt"],
+  ["Berlin", "Bremen"],
+  ["Berlin", "Hamburg"],
+  ["Frankfurt", "Dresden"],
+  ["Frankfurt", "Bremen"],
+  ["Munich", "Frankfurt"],
+  ["Dresden", "Munich"],
+  ["Dresden", "Bremen"],
+];
+
+nodes.forEach((node) => {
+  graph.addNode(node);
+});
+
+edges.forEach((nodes) => {
+  graph.addEdge(nodes[0], nodes[1]);
+});
+
+graph.breadthFirstSearch("Berlin", (node) => {
+  console.log(node.key);
+});
