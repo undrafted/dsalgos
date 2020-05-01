@@ -1,20 +1,23 @@
-const printArray = (arr: number[]) => {
+export const printArray = (arr: number[]) => {
   console.log(arr.join(" "));
 };
 
+// https://www.youtube.com/watch?v=6Gv8vg0kcHc
 const bubbleSort = (arr: number[]): number[] => {
-  let isSorted = false;
-  // printArray(arr);
+  printArray(arr);
 
+  let isSorted = false;
+  let iterationsCount = 0;
   // for every pass, the biggest number will go to the end of the array
   // so we can reduce the loop count on every pass
   let lastUnsorted = arr.length - 1;
 
   while (!isSorted) {
-    printArray(arr);
     isSorted = true;
 
     for (let i = 0; i < lastUnsorted; i++) {
+      iterationsCount += 1;
+
       if (arr[i] > arr[i + 1]) {
         isSorted = false;
         const temp = arr[i];
@@ -27,6 +30,7 @@ const bubbleSort = (arr: number[]): number[] => {
   }
 
   printArray(arr);
+  console.log("iteration count: ", iterationsCount);
   return arr;
 };
 
