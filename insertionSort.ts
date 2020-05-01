@@ -1,3 +1,5 @@
+import { strict as assert } from "assert";
+
 export const printArray = (arr: number[]) => {
   console.log(arr.join(" "));
 };
@@ -23,4 +25,5 @@ const insertionSort = (arr: number[]): number[] => {
 };
 
 const arr = [5, 4, 2, 10, 12, 11, 1, 20, 5, 15, 1, 0, 25];
-insertionSort(arr);
+let sortedArr = insertionSort(arr);
+assert.deepEqual(sortedArr, [0, 1, 1, 2, 4, 5, 5, 10, 11, 12, 15, 20, 25]);
